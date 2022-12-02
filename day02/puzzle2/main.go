@@ -28,7 +28,7 @@ func main() {
 	// initialise a score counter
 	score := 0
 
-	// iterate over the array, match and score the elements for each game
+	// iterate over the array, score the elements for each game based on lose/draw/win
 	for idx := range games {
 		switch {
 		case games[idx][0] == "A":
