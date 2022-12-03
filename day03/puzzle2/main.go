@@ -8,6 +8,9 @@ import (
 )
 
 func main() {
+	// create an empty 2d array (slice)
+	comps := [][]string{}
+
 	// open the input file
 	file, err := os.Open("./input.txt")
 	if err != nil {
@@ -15,29 +18,40 @@ func main() {
 	}
 	defer file.Close()
 
-	// initialise a score counter
-	sum := 0
-
 	// scan the input file line by line into the array
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		ln := strings.Split(scanner.Text(), "")
-		sl1 := ln[:len(ln)/2]
-		sl2 := ln[len(ln)/2:]
+		comps = append(comps, ln)
+	}
 
-		matchFound := false
+	// initialise a score counter
+	sum := 0
+	count := 0
 
-		for idx := 0; idx < len(sl1); idx++ {
-			for jdx := 0; jdx < len(sl2); jdx++ {
-				if sl1[idx] == sl2[jdx] && matchFound == false {
-					matchFound = true
-					sum += getPri(sl1[idx])
+	for idx := 0; idx < len(comps); idx += 3 {
+		match := false
+		tmp := []string{}
+		for _, e1 := range comps[idx] {
+			for _, e2 := range comps[idx+1] {
+				if e1 == e2 {
+					tmp = append(tmp, e1)
+					for _, e3 := range tmp {
+						for _, e4 := range comps[idx+2] {
+							if e3 == e4 && match == false {
+								match = true
+								count++
+								sum += getPri(e3)
+							}
+						}
+					}
 				}
 			}
 		}
 	}
 
-	fmt.Printf("The sum of items is: %d\n", sum)
+	fmt.Printf("Sum: %d\n", sum)
+	fmt.Printf("(Count: %d)\n", count)
 
 }
 
